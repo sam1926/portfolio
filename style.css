@@ -200,7 +200,7 @@ body.zoom-mode {
 .menu-drawer .menu-link {
   background: none;
   border: none;
-  color: inherit;
+  color: #000000;
   font-family: inherit;
   padding: 0;
   text-align: left;
@@ -664,7 +664,7 @@ body.modal-open {
 
 .about-modal p,
 .contact-modal p {
-  font-size: 20px;
+  font-size: 30px;
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.9);
 }
