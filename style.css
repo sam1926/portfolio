@@ -212,10 +212,7 @@ body.zoom-mode {
 }
 
 .menu-drawer .menu-link:hover,
-.menu-drawer .menu-link:focus-visible {
-  color: #ffffff;
-  mix-blend-mode: normal;
-}
+
 
 .menu-section.open .menu-drawer {
   transform: translateY(0);
