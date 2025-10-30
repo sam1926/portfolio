@@ -120,8 +120,8 @@ body.zoom-mode {
 }
 
 .hamburger-button {
-  width: 27.5rem;
-  height: 27.5rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.35);
   background: rgba(0, 0, 0, 0.2);
@@ -129,15 +129,15 @@ body.zoom-mode {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 3.5rem;
+  gap: 0.5rem;
   cursor: pointer;
   transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .hamburger-button span {
   display: block;
-  width: 12.5rem;
-  height: 0.5rem;
+  width: 2.25rem;
+  height: 0.22rem;
   background: #fff;
   transition: transform 0.3s ease, opacity 0.3s ease;
   transform-origin: center;
@@ -150,7 +150,7 @@ body.zoom-mode {
 }
 
 .menu-section.open .hamburger-button span:nth-child(1) {
-  transform: translateY(3.5rem) rotate(45deg);
+  transform: translateY(0.35rem) rotate(45deg);
 }
 
 .menu-section.open .hamburger-button span:nth-child(2) {
@@ -158,7 +158,7 @@ body.zoom-mode {
 }
 
 .menu-section.open .hamburger-button span:nth-child(3) {
-  transform: translateY(-3.5rem) rotate(-45deg);
+  transform: translateY(-0.35rem) rotate(-45deg);
 }
 
 .menu-drawer {
@@ -205,6 +205,16 @@ body.zoom-mode {
   padding: 0;
   text-align: left;
   cursor: pointer;
+}
+
+.menu-drawer .menu-link::after {
+  display: none;
+}
+
+.menu-drawer .menu-link:hover,
+.menu-drawer .menu-link:focus-visible {
+  color: #ffffff;
+  mix-blend-mode: normal;
 }
 
 .menu-section.open .menu-drawer {
@@ -505,8 +515,21 @@ h3 {
   }
 
   .hamburger-button {
-    width: 3rem;
-    height: 3rem;
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .hamburger-button span {
+    width: 1.75rem;
+    height: 0.2rem;
+  }
+
+  .menu-section.open .hamburger-button span:nth-child(1) {
+    transform: translateY(0.35rem) rotate(45deg);
+  }
+
+  .menu-section.open .hamburger-button span:nth-child(3) {
+    transform: translateY(-0.35rem) rotate(-45deg);
   }
 
   .menu-drawer {
@@ -637,16 +660,16 @@ body.modal-open {
 
 .about-modal h2,
 .contact-modal h2 {
-  font-size: 32px;
-  margin-bottom: 1.5rem;
+  font-size: 40px;
+  margin-bottom: 1.75rem;
   letter-spacing: -0.02em;
 }
 
 .about-modal p,
 .contact-modal p {
-  font-size: 16px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 20px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .about-modal__profile {
@@ -674,7 +697,7 @@ body.modal-open {
 }
 
 .contact-modal__list a {
-  font-size: 18px;
+  font-size: 22px;
 }
 
 /* Simple 64px white arrow button */
