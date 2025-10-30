@@ -163,8 +163,6 @@ class FashionGallery {
     this.splitScreenContainer = document.getElementById("splitScreenContainer");
     this.imageTitleOverlay = document.getElementById("imageTitleOverlay");
     this.closeButton = document.getElementById("closeButton");
-    this.controlsContainer = document.getElementById("controlsContainer");
-    this.soundToggle = document.getElementById("soundToggle");
     // Create custom eases
     this.customEase = CustomEase.create("smooth", ".87,0,.13,1");
     this.centerEase = CustomEase.create("center", ".25,.46,.45,.94");
@@ -174,7 +172,7 @@ class FashionGallery {
       baseGap: 16,
       rows: 8,
       cols: 12,
-      currentZoom: 0.6,
+      currentZoom: 1.35,
       currentGap: 32
     };
     // State
@@ -199,7 +197,7 @@ class FashionGallery {
   }
   initSoundSystem() {
     this.soundSystem = {
-      enabled: false,
+      enabled: true,
       sounds: {
         click: new Audio("https://assets.codepen.io/7558/glitch-fx-001.mp3"),
         open: new Audio("https://assets.codepen.io/7558/click-glitch-001.mp3"),
@@ -227,18 +225,6 @@ class FashionGallery {
         } catch (e) {
           // Silently handle audio errors
         }
-      },
-      toggle: () => {
-        this.soundSystem.enabled = !this.soundSystem.enabled;
-        this.soundToggle.classList.toggle("active", this.soundSystem.enabled);
-        // Prevent visual conflicts during sound toggle
-        if (this.zoomState.isActive) return;
-        if (this.soundSystem.enabled) {
-          // Delay sound to prevent flashing during visual updates
-          setTimeout(() => {
-            this.soundSystem.play("click");
-          }, 50);
-        }
       }
     };
     // Preload sounds
@@ -246,71 +232,6 @@ class FashionGallery {
       audio.preload = "auto";
       audio.volume = 0.3;
     });
-    // Initialize sound wave canvas animation
-    this.initSoundWave();
-  }
-  initSoundWave() {
-    const canvas = document.getElementById("soundWaveCanvas");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const width = 32;
-    const height = 16;
-    const centerY = Math.floor(height / 2);
-    let startTime = Date.now();
-    let currentAmplitude = this.soundSystem.enabled ? 1 : 0;
-    const interpolateColor = (color1, color2, factor) => {
-      const r1 = parseInt(color1.substring(1, 3), 16);
-      const g1 = parseInt(color1.substring(3, 5), 16);
-      const b1 = parseInt(color1.substring(5, 7), 16);
-      const r2 = parseInt(color2.substring(1, 3), 16);
-      const g2 = parseInt(color2.substring(3, 5), 16);
-      const b2 = parseInt(color2.substring(5, 7), 16);
-      const r = Math.round(r1 + factor * (r2 - r1))
-        .toString(16)
-        .padStart(2, "0");
-      const g = Math.round(g1 + factor * (g2 - g1))
-        .toString(16)
-        .padStart(2, "0");
-      const b = Math.round(b1 + factor * (b2 - b1))
-        .toString(16)
-        .padStart(2, "0");
-      return `#${r}${g}${b}`;
-    };
-    const animate = () => {
-      const targetAmplitude = this.soundSystem.enabled ? 1 : 0;
-      currentAmplitude += (targetAmplitude - currentAmplitude) * 0.08;
-      ctx.clearRect(0, 0, width, height);
-      const time = (Date.now() - startTime) / 1000;
-      const muteFactor = 1 - currentAmplitude;
-      const primaryColor = "#2C1B14";
-      const accentColor = "#A64B23";
-      const muteColor = "#D9C4AA";
-      if (!this.soundSystem.enabled && currentAmplitude < 0.01) {
-        ctx.fillStyle = muteColor;
-        ctx.fillRect(0, centerY, width, 2);
-      } else {
-        ctx.fillStyle = interpolateColor(primaryColor, muteColor, muteFactor);
-        for (let i = 0; i < width; i++) {
-          const x = i - width / 2;
-          const e = Math.exp((-x * x) / 50);
-          const y =
-            centerY +
-            Math.cos(x * 0.4 - time * 8) * e * height * 0.35 * currentAmplitude;
-          ctx.fillRect(i, Math.round(y), 1, 2);
-        }
-        ctx.fillStyle = interpolateColor(accentColor, muteColor, muteFactor);
-        for (let i = 0; i < width; i++) {
-          const x = i - width / 2;
-          const e = Math.exp((-x * x) / 80);
-          const y =
-            centerY +
-            Math.cos(x * 0.3 - time * 5) * e * height * 0.25 * currentAmplitude;
-          ctx.fillRect(i, Math.round(y), 1, 2);
-        }
-      }
-      requestAnimationFrame(animate);
-    };
-    animate();
   }
   initImageData() {
     // Fashion portrait images
@@ -729,7 +650,6 @@ class FashionGallery {
         }
       }
     );
-    this.controlsContainer.classList.add("split-mode");
     gsap.fromTo(
       this.closeButton,
       {
@@ -831,7 +751,6 @@ class FashionGallery {
       ease: "power2.in"
     });
     splitContainer.classList.remove("active");
-    this.controlsContainer.classList.remove("split-mode");
     gsap.to(splitContainer, {
       opacity: 0,
       duration: 0.8,
@@ -1018,63 +937,6 @@ class FashionGallery {
             });
           });
           // Show controls with staggered animation
-          const percentageIndicator = this.controlsContainer.querySelector(
-            ".percentage-indicator"
-          );
-          const switchElement = this.controlsContainer.querySelector(".switch");
-          const soundToggle = this.controlsContainer.querySelector(
-            ".sound-toggle"
-          );
-          gsap.set(this.controlsContainer, {
-            opacity: 0
-          });
-          gsap.set(percentageIndicator, {
-            x: "-3em"
-          });
-          gsap.set(switchElement, {
-            y: "2em"
-          });
-          gsap.set(soundToggle, {
-            x: "3em"
-          });
-          const navTimeline = gsap.timeline();
-          navTimeline.to(
-            this.controlsContainer,
-            {
-              opacity: 1,
-              duration: 0.5,
-              ease: "power2.out"
-            },
-            0
-          );
-          navTimeline.to(
-            percentageIndicator,
-            {
-              x: 0,
-              duration: 0.2,
-              ease: "power2.out"
-            },
-            0.25
-          );
-          navTimeline.to(
-            switchElement,
-            {
-              y: 0,
-              duration: 0.2,
-              ease: "power2.out"
-            },
-            0.3
-          );
-          navTimeline.to(
-            soundToggle,
-            {
-              x: 0,
-              duration: 0.2,
-              ease: "power2.out"
-            },
-            0.35
-          );
-          this.controlsContainer.classList.add("visible");
         }
       }
     );
@@ -1147,19 +1009,6 @@ class FashionGallery {
         });
       }
     });
-    this.updatePercentageIndicator(fitZoom);
-    document.querySelectorAll(".switch-button").forEach((btn) => {
-      btn.classList.remove("switch-button-current");
-    });
-    if (buttonElement) {
-      buttonElement.classList.add("switch-button-current");
-    }
-  }
-  updatePercentageIndicator(zoomLevel) {
-    const percentage = Math.round(zoomLevel * 100);
-    document.getElementById(
-      "percentageIndicator"
-    ).textContent = `${percentage}%`;
   }
   setZoom(zoomLevel, buttonElement = null) {
     if (this.zoomState.isActive) {
@@ -1228,20 +1077,6 @@ class FashionGallery {
         });
       }
     });
-    this.updatePercentageIndicator(zoomLevel);
-    document.querySelectorAll(".switch-button").forEach((btn) => {
-      btn.classList.remove("switch-button-current");
-    });
-    if (buttonElement) {
-      buttonElement.classList.add("switch-button-current");
-    } else {
-      const buttons = document.querySelectorAll(".switch-button");
-      if (zoomLevel === 0.3) buttons[1].classList.add("switch-button-current");
-      else if (zoomLevel === 0.6)
-        buttons[2].classList.add("switch-button-current");
-      else if (zoomLevel === 1.0)
-        buttons[3].classList.add("switch-button-current");
-    }
   }
   resetPosition() {
     if (this.zoomState.isActive) {
@@ -1288,8 +1123,6 @@ class FashionGallery {
     });
     this.lastValidPosition.x = centerX;
     this.lastValidPosition.y = centerY;
-    this.updatePercentageIndicator(this.config.currentZoom);
-
     // Setup event listeners
     this.setupEventListeners();
 
@@ -1332,31 +1165,106 @@ class FashionGallery {
     document.addEventListener("mouseleave", () => this.handleMouseLeave());
     this.viewport.addEventListener("mouseleave", () => this.handleMouseLeave());
     this.closeButton.addEventListener("click", () => this.exitZoomMode());
-    this.soundToggle.addEventListener("click", () => this.soundSystem.toggle());
-    // Keyboard shortcuts
-    document.addEventListener("keydown", (e) => {
-      if (this.zoomState.isActive) return;
-      switch (e.key) {
-        case "1":
-          this.setZoom(0.3);
-          break;
-        case "2":
-          this.setZoom(0.6);
-          break;
-        case "3":
-          this.setZoom(1.0);
-          break;
-        case "f":
-        case "F":
-          this.autoFitZoom();
-          break;
-      }
-    });
   }
+}
+function setupMenuAndModal() {
+  const menuSection = document.querySelector(".menu-section");
+  const menuToggle = document.getElementById("menuToggle");
+  const menuDrawer = document.getElementById("menuDrawer");
+  if (!menuSection || !menuToggle || !menuDrawer) return;
+
+  const closeMenu = () => {
+    menuSection.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  };
+
+  const openMenu = () => {
+    menuSection.classList.add("open");
+    menuToggle.setAttribute("aria-expanded", "true");
+  };
+
+  menuToggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (menuSection.classList.contains("open")) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!menuSection.contains(event.target)) {
+      closeMenu();
+    }
+  });
+
+  menuDrawer.addEventListener("click", (event) => {
+    const link = event.target.closest("a");
+    if (link) {
+      closeMenu();
+    }
+  });
+
+  const openModals = new Set();
+
+  const closeModal = (modal) => {
+    if (!modal || !openModals.has(modal)) return;
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    openModals.delete(modal);
+    if (openModals.size === 0) {
+      document.body.classList.remove("modal-open");
+    }
+  };
+
+  const openModal = (modal) => {
+    if (!modal) return;
+    closeMenu();
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    openModals.add(modal);
+    const focusTarget = modal.querySelector("[data-close-modal]");
+    focusTarget?.focus({ preventScroll: true });
+  };
+
+  const modalTriggers = document.querySelectorAll("[data-open-modal]");
+  const processedModals = new Set();
+  modalTriggers.forEach((trigger) => {
+    const modalId = trigger.getAttribute("data-open-modal");
+    if (!modalId) return;
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    trigger.addEventListener("click", (event) => {
+      event.preventDefault();
+      openModal(modal);
+    });
+    if (!processedModals.has(modal)) {
+      const closeElements = modal.querySelectorAll("[data-close-modal]");
+      closeElements.forEach((el) => {
+        el.addEventListener("click", () => closeModal(modal));
+      });
+      processedModals.add(modal);
+    }
+  });
+
+  const closeAllModals = () => {
+    openModals.forEach((modal) => {
+      closeModal(modal);
+    });
+  };
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAllModals();
+      closeMenu();
+    }
+  });
 }
 // Initialize gallery with preloader
 let gallery;
 document.addEventListener("DOMContentLoaded", () => {
+  setupMenuAndModal();
   const preloader = new PreloaderManager();
 
   // Wait for preloader to complete, then initialize gallery

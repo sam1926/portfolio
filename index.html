@@ -15,38 +15,34 @@
 <!-- Header Navigation -->
 <div class="header">
   <div class="nav-section">
-    <div class="logo-container">
-      <div class="logo-circles">
-        <div class="circle circle-1"></div>
-        <div class="circle circle-2"></div>
-      </div>
-    </div>
+    <div class="logo-text">Portfolio</div>
   </div>
-  <div class="values-section">
-    <h3>+Menu</h3>
-    <ul>
-      <li><a href="#">Work</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Services</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-  </div>
-  <div class="location-section">
-    <h3>+Studio</h3>
-    <p>Los Angeles</p>
-    <p>California</p>
-  </div>
-  <div class="contact-section">
-    <h3>+Connect</h3>
-    <p><a href="mailto:hi@filip.fyi">hi@filip.fyi</a></p>
-  </div>
-  <div class="social-section">
-    <h3>+Follow</h3>
-    <ul>
-      <li><a href="https://instagram.com/filipz__">Instagram</a></li>
-      <li><a href="https://x.com/filipz">Twitter</a></li>
-      <li><a href="https://linkedin.com/in/filipzrnzevic">LinkedIn</a></li>
-    </ul>
+  <div class="menu-section">
+    <button
+      class="hamburger-button"
+      id="menuToggle"
+      aria-expanded="false"
+      aria-label="Toggle navigation menu"
+      aria-controls="menuDrawer"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav class="menu-drawer" id="menuDrawer" aria-label="Primary navigation">
+      <ul>
+        <li>
+          <button class="menu-link" type="button" data-open-modal="aboutModal">
+            About
+          </button>
+        </li>
+        <li>
+          <button class="menu-link" type="button" data-open-modal="contactModal">
+            Contact
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
 
@@ -89,39 +85,63 @@
   </svg>
 </button>
 
-<!-- Controls Container -->
-<div class="controls-container" id="controlsContainer">
-  <div class="percentage-indicator" id="percentageIndicator">
-    60%
-  </div>
-  <div class="switch" id="controls">
-    <button class="switch-button" onclick="gallery.setZoom(0.3, this)">
-      <span class="indicator-dot"></span>
-      ZOOM OUT
-    </button>
-    <button class="switch-button switch-button-current" onclick="gallery.setZoom(0.6, this)">
-      <span class="indicator-dot"></span>
-      NORMAL
-    </button>
-    <button class="switch-button" onclick="gallery.setZoom(1.0, this)">
-      <span class="indicator-dot"></span>
-      ZOOM IN
-    </button>
-    <button class="switch-button" onclick="gallery.autoFitZoom(this)">
-      <span class="indicator-dot"></span>
-      FIT
-    </button>
-  </div>
-  <button class="sound-toggle" id="soundToggle">
-    <canvas class="sound-wave-canvas" id="soundWaveCanvas" width="32" height="16"></canvas>
-  </button>
-</div>
-
 <!-- Footer Navigation -->
 <div class="footer">
-  <div class="info-section">
+  <div class="footer-info">
     <p>Est. 2025 • Summer Days</p>
     <p>34.0522° N, 118.2437° W</p>
+  </div>
+</div>
+
+<!-- About Modal -->
+<div class="about-modal" id="aboutModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
+  <div class="about-modal__backdrop" data-close-modal></div>
+  <div class="about-modal__content" role="document">
+    <button class="about-modal__close" type="button" aria-label="Close about section" data-close-modal>
+      ×
+    </button>
+    <h2 id="aboutModalTitle">About</h2>
+    <div class="about-modal__profile" role="img" aria-label="Portrait placeholder">
+      <div class="about-modal__profile-placeholder">Profile</div>
+    </div>
+    <p>
+      The studio frames fashion narratives through bold contrasts, tactile palettes, and
+      kinetic light. Every project is treated as a cinematic moment—crafted to evoke
+      energy, capture authenticity, and leave a lasting silhouette.
+    </p>
+  </div>
+</div>
+
+<!-- Contact Modal -->
+<div
+  class="contact-modal"
+  id="contactModal"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="contactModalTitle"
+>
+  <div class="contact-modal__backdrop" data-close-modal></div>
+  <div class="contact-modal__content" role="document">
+    <button class="contact-modal__close" type="button" aria-label="Close contact panel" data-close-modal>
+      ×
+    </button>
+    <h2 id="contactModalTitle">Contact</h2>
+    <p>Let's connect—drop a note or find me across the studio channels.</p>
+    <ul class="contact-modal__list">
+      <li>
+        <a href="mailto:hi@filip.fyi">hi@filip.fyi</a>
+      </li>
+      <li>
+        <a href="https://instagram.com/filipz__" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </li>
+      <li>
+        <a href="https://x.com/filipz" target="_blank" rel="noopener noreferrer">Twitter</a>
+      </li>
+      <li>
+        <a href="https://linkedin.com/in/filipzrnzevic" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </li>
+    </ul>
   </div>
 </div>
 

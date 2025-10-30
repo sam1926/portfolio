@@ -78,20 +78,29 @@ body.zoom-mode {
   grid-column: 1 / span 3;
 }
 
-.values-section {
-  grid-column: 5 / span 2;
+.header .menu-section {
+  grid-column: 10 / span 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  position: relative;
+  z-index: 20;
 }
 
-.location-section {
-  grid-column: 7 / span 2;
+.footer {
+  justify-items: end;
+  align-items: end;
 }
 
-.contact-section {
-  grid-column: 9 / span 2;
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding-right: 2rem;
 }
 
-.social-section {
-  grid-column: 11 / span 2;
+.footer .footer-info {
   text-align: right;
 }
 
@@ -101,54 +110,117 @@ body.zoom-mode {
   font-family: "TheGoodMonolith", monospace;
 }
 
-.info-section {
-  grid-column: 9 / span 4;
-  text-align: right;
+/* ===== LOGO COMPONENT ===== */
+.logo-text {
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--color-text);
 }
 
-/* ===== LOGO COMPONENT ===== */
-.logo-container {
-  margin-bottom: var(--spacing-md);
+.hamburger-button {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.hamburger-button span {
   display: block;
-  width: 3rem;
-  height: 1.5rem;
-  position: relative;
+  width: 2.25rem;
+  height: 0.22rem;
+  background: #fff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+
+.menu-section.open .hamburger-button {
+  transform: rotate(90deg);
+  border-color: rgba(255, 255, 255, 0.6);
+  gap: 0;
+}
+
+.menu-section.open .hamburger-button span:nth-child(1) {
+  transform: translateY(0.35rem) rotate(45deg);
+}
+
+.menu-section.open .hamburger-button span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-section.open .hamburger-button span:nth-child(3) {
+  transform: translateY(-0.35rem) rotate(-45deg);
+}
+
+.menu-drawer {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 1rem;
+  padding: 1.25rem 1.5rem;
+  min-width: 220px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+  transform: translateY(-10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 15;
+}
+
+.menu-drawer ul {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.menu-drawer li {
+  display: block;
+}
+
+.menu-drawer a,
+.menu-drawer .menu-link {
+  font-size: 5rem;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.menu-drawer .menu-link {
+  background: none;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  padding: 0;
+  text-align: left;
   cursor: pointer;
 }
 
-.logo-circles {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.menu-drawer .menu-link::after {
+  display: none;
 }
 
-.circle {
-  position: absolute;
-  border-radius: 50%;
-  transition: transform var(--transition-medium);
-  width: 1.4rem;
-  height: 1.4rem;
-  background-color: var(--color-text);
-  top: 50%;
+.menu-drawer .menu-link:hover,
+.menu-drawer .menu-link:focus-visible {
+  color: #ffffff;
+  mix-blend-mode: normal;
 }
 
-.circle-1 {
-  left: 0;
-  transform: translate(0, -50%);
-}
-
-.circle-2 {
-  left: 0.8rem;
-  transform: translate(0, -50%);
-  mix-blend-mode: exclusion;
-}
-
-.logo-container:hover .circle-1 {
-  transform: translate(-0.5rem, -50%);
-}
-
-.logo-container:hover .circle-2 {
-  transform: translate(0.5rem, -50%);
+.menu-section.open .menu-drawer {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Key hint styling */
@@ -171,7 +243,8 @@ body.zoom-mode {
 }
 
 /* Global link styling */
-a {
+a,
+.menu-link {
   position: relative;
   cursor: pointer;
   color: var(--color-text);
@@ -185,7 +258,8 @@ a {
   font-weight: 700;
 }
 
-a::after {
+a::after,
+.menu-link::after {
   content: "";
   position: absolute;
   top: 0;
@@ -197,11 +271,13 @@ a::after {
   transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-a:hover::after {
+a:hover::after,
+.menu-link:hover::after {
   width: 100%;
 }
 
-a:hover {
+a:hover,
+.menu-link:hover {
   color: black;
   mix-blend-mode: difference;
   opacity: 1;
@@ -427,6 +503,50 @@ h3 {
 }
 
 @media (max-width: 900px) {
+  .header,
+  .footer {
+    grid-template-columns: repeat(6, 1fr);
+    padding: 1.25rem;
+  }
+
+  .header .menu-section {
+    grid-column: 4 / span 3;
+    justify-content: flex-end;
+  }
+
+  .hamburger-button {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .hamburger-button span {
+    width: 1.75rem;
+    height: 0.2rem;
+  }
+
+  .menu-section.open .hamburger-button span:nth-child(1) {
+    transform: translateY(0.35rem) rotate(45deg);
+  }
+
+  .menu-section.open .hamburger-button span:nth-child(3) {
+    transform: translateY(-0.35rem) rotate(-45deg);
+  }
+
+  .menu-drawer {
+    right: -0.5rem;
+    width: min(90vw, 320px);
+  }
+
+  .menu-drawer a,
+  .menu-drawer .menu-link {
+    font-size: 20px;
+  }
+
+  .footer .footer-info {
+    grid-column: 1 / span 6;
+    text-align: right;
+  }
+
   .image-title-overlay {
     bottom: 20px;
     left: 20px;
@@ -475,127 +595,109 @@ h3 {
   letter-spacing: 2px;
 }
 
-.controls-container {
+body.modal-open {
+  overflow: hidden;
+}
+
+.about-modal,
+.contact-modal {
   position: fixed;
-  bottom: 1.25em;
-  left: 50%;
-  transform: translateX(-50%);
+  inset: 0;
   display: flex;
-  z-index: 6;
+  align-items: center;
+  justify-content: center;
   opacity: 0;
-  transition: left 1.2s cubic-bezier(0.87, 0, 0.13, 1);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10001;
 }
 
-.controls-container.visible {
+.about-modal.active,
+.contact-modal.active {
   opacity: 1;
+  pointer-events: auto;
 }
 
-.controls-container.split-mode {
-  left: 75%;
+.about-modal__backdrop,
+.contact-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
 }
 
-.percentage-indicator {
-  background-color: #f0f0f0;
-  background-image: radial-gradient(rgba(0, 0, 0, 0.015) 1px, transparent 0);
-  background-size: 0.44em 0.44em;
-  background-position: -0.06em -0.06em;
-  padding: 0.625em 1.25em;
-  border-radius: 0.25em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "TheGoodMonolith", monospace;
-  font-size: 0.75em;
-  font-weight: 400;
-  text-transform: uppercase;
-  color: #333;
-  min-width: 5em;
-  white-space: nowrap;
-}
-
-.switch {
-  display: flex;
-  gap: 1.25em;
-  background-color: #222;
-  background-image: radial-gradient(
-    rgba(255, 255, 255, 0.015) 1px,
-    transparent 0
-  );
-  background-size: 0.44em 0.44em;
-  background-position: -0.06em -0.06em;
-  padding: 0.625em 1.25em;
-  border-radius: 0.25em;
-  transition: padding 0.3s ease-in-out;
-}
-
-.sound-toggle {
-  background-color: #f0f0f0;
-  background-image: radial-gradient(rgba(0, 0, 0, 0.015) 1px, transparent 0);
-  background-size: 0.44em 0.44em;
-  background-position: -0.06em -0.06em;
-  padding: 0.5em 0.75em;
-  border-radius: 0.25em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 3.75em;
+.about-modal__content,
+.contact-modal__content {
   position: relative;
-  border-color: transparent;
+  background: rgba(8, 8, 8, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  padding: 3rem;
+  max-width: 520px;
+  width: 90vw;
+  color: #fff;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
 }
 
-.sound-wave-canvas {
-  width: 2em;
-  height: 1em;
-  border: none !important;
-  outline: none !important;
-  background: none !important;
-}
-
-.sound-toggle.active .sound-wave-canvas {
-  opacity: 1;
-}
-
-.sound-toggle:hover .sound-wave-canvas {
-  opacity: 0.8;
-}
-
-.switch-button {
+.about-modal__close,
+.contact-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
   background: none;
   border: none;
-  border-color: transparent;
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 2rem;
+  line-height: 1;
   cursor: pointer;
-  font-family: "TheGoodMonolith", monospace;
-  font-size: 0.75em;
-  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+.about-modal__close:hover,
+.contact-modal__close:hover {
+  color: #fff;
+}
+
+.about-modal h2,
+.contact-modal h2 {
+  font-size: 40px;
+  margin-bottom: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+.about-modal p,
+.contact-modal p {
+  font-size: 20px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.about-modal__profile {
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  margin-bottom: 2rem;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.about-modal__profile-placeholder {
+  font-size: 12px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  padding: 5px 10px;
-  position: relative;
-  transition: all 0.3s ease-in-out;
-  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.55);
 }
 
-.switch-button-current {
-  color: #f0f0f0;
+.contact-modal__list {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1rem;
 }
 
-.indicator-dot {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background-color: #f0f0f0;
-  border-radius: 50%;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  top: 50%;
-  transform: translateY(-50%);
-  left: -8px;
-}
-
-.switch-button:hover .indicator-dot {
-  opacity: 1;
+.contact-modal__list a {
+  font-size: 22px;
 }
 
 /* Simple 64px white arrow button */
