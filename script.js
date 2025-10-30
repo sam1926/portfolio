@@ -240,7 +240,7 @@ initImageData() {
     this.fashionImages.push(`${i}.jpg`);
     // or `/images/${i}.jpg` depending on your setup
   }
-}
+
 
     // Image data for titles and descriptions
     this.imageData = [
