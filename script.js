@@ -233,15 +233,15 @@ class FashionGallery {
       audio.volume = 0.3;
     });
   }
-  initImageData() {
-    // Fashion portrait images
-    this.fashionImages = [];
-    for (let i = 1; i <= 14; i++) {
-      const paddedNumber = String(i).padStart(2, "0");
-      this.fashionImages.push(
-        `https://assets.codepen.io/7558/orange-portrait_${paddedNumber}.jpg`
-      );
-    }
+initImageData() {
+  // Images from /images/1.jpg to /images/22.jpg
+  this.fashionImages = [];
+  for (let i = 1; i <= 22; i++) {
+    this.fashionImages.push(`${i}.jpg`);
+    // or `/images/${i}.jpg` depending on your setup
+  }
+}
+
     // Image data for titles and descriptions
     this.imageData = [
       {
