@@ -1123,8 +1123,6 @@ class FashionGallery {
     });
     this.lastValidPosition.x = centerX;
     this.lastValidPosition.y = centerY;
-    this.updatePercentageIndicator(this.config.currentZoom);
-
     // Setup event listeners
     this.setupEventListeners();
 
