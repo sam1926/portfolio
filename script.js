@@ -163,7 +163,6 @@ class FashionGallery {
     this.splitScreenContainer = document.getElementById("splitScreenContainer");
     this.imageTitleOverlay = document.getElementById("imageTitleOverlay");
     this.closeButton = document.getElementById("closeButton");
-    this.controlsContainer = document.getElementById("controlsContainer");
     // Create custom eases
     this.customEase = CustomEase.create("smooth", ".87,0,.13,1");
     this.centerEase = CustomEase.create("center", ".25,.46,.45,.94");
@@ -651,7 +650,6 @@ class FashionGallery {
         }
       }
     );
-    this.controlsContainer?.classList.add("split-mode");
     gsap.fromTo(
       this.closeButton,
       {
@@ -753,7 +751,6 @@ class FashionGallery {
       ease: "power2.in"
     });
     splitContainer.classList.remove("active");
-    this.controlsContainer?.classList.remove("split-mode");
     gsap.to(splitContainer, {
       opacity: 0,
       duration: 0.8,
@@ -940,37 +937,6 @@ class FashionGallery {
             });
           });
           // Show controls with staggered animation
-          const percentageIndicator = this.controlsContainer?.querySelector(
-            ".percentage-indicator"
-          );
-          if (this.controlsContainer && percentageIndicator) {
-            gsap.set(this.controlsContainer, {
-              opacity: 0
-            });
-            gsap.set(percentageIndicator, {
-              x: "-3em"
-            });
-            const navTimeline = gsap.timeline();
-            navTimeline.to(
-              this.controlsContainer,
-              {
-                opacity: 1,
-                duration: 0.5,
-                ease: "power2.out"
-              },
-              0
-            );
-            navTimeline.to(
-              percentageIndicator,
-              {
-                x: 0,
-                duration: 0.2,
-                ease: "power2.out"
-              },
-              0.25
-            );
-            this.controlsContainer.classList.add("visible");
-          }
         }
       }
     );
@@ -1043,13 +1009,6 @@ class FashionGallery {
         });
       }
     });
-    this.updatePercentageIndicator(fitZoom);
-  }
-  updatePercentageIndicator(zoomLevel) {
-    const percentage = Math.round(zoomLevel * 100);
-    document.getElementById(
-      "percentageIndicator"
-    ).textContent = `${percentage}%`;
   }
   setZoom(zoomLevel, buttonElement = null) {
     if (this.zoomState.isActive) {
@@ -1118,7 +1077,6 @@ class FashionGallery {
         });
       }
     });
-    this.updatePercentageIndicator(zoomLevel);
   }
   resetPosition() {
     if (this.zoomState.isActive) {
@@ -1215,7 +1173,6 @@ function setupMenuAndModal() {
   const menuSection = document.querySelector(".menu-section");
   const menuToggle = document.getElementById("menuToggle");
   const menuDrawer = document.getElementById("menuDrawer");
-  const aboutModal = document.getElementById("aboutModal");
   if (!menuSection || !menuToggle || !menuDrawer) return;
 
   const closeMenu = () => {
@@ -1250,46 +1207,58 @@ function setupMenuAndModal() {
     }
   });
 
-  const aboutTriggers = document.querySelectorAll(
-    '[data-open-modal="aboutModal"]'
-  );
+  const openModals = new Set();
 
-  const closeAboutModal = () => {
-    if (!aboutModal) return;
-    aboutModal.classList.remove("active");
-    aboutModal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("modal-open");
+  const closeModal = (modal) => {
+    if (!modal || !openModals.has(modal)) return;
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    openModals.delete(modal);
+    if (openModals.size === 0) {
+      document.body.classList.remove("modal-open");
+    }
   };
 
-  const openAboutModal = () => {
-    if (!aboutModal) return;
+  const openModal = (modal) => {
+    if (!modal) return;
     closeMenu();
-    aboutModal.classList.add("active");
-    aboutModal.setAttribute("aria-hidden", "false");
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
-    const focusTarget = aboutModal.querySelector(".about-modal__close");
+    openModals.add(modal);
+    const focusTarget = modal.querySelector("[data-close-modal]");
     focusTarget?.focus({ preventScroll: true });
   };
 
-  aboutTriggers.forEach((trigger) => {
+  const modalTriggers = document.querySelectorAll("[data-open-modal]");
+  const processedModals = new Set();
+  modalTriggers.forEach((trigger) => {
+    const modalId = trigger.getAttribute("data-open-modal");
+    if (!modalId) return;
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
     trigger.addEventListener("click", (event) => {
       event.preventDefault();
-      openAboutModal();
+      openModal(modal);
     });
+    if (!processedModals.has(modal)) {
+      const closeElements = modal.querySelectorAll("[data-close-modal]");
+      closeElements.forEach((el) => {
+        el.addEventListener("click", () => closeModal(modal));
+      });
+      processedModals.add(modal);
+    }
   });
 
-  if (aboutModal) {
-    const closeElements = aboutModal.querySelectorAll("[data-close-modal]");
-    closeElements.forEach((el) => {
-      el.addEventListener("click", () => {
-        closeAboutModal();
-      });
+  const closeAllModals = () => {
+    openModals.forEach((modal) => {
+      closeModal(modal);
     });
-  }
+  };
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-      closeAboutModal();
+      closeAllModals();
       closeMenu();
     }
   });

@@ -88,18 +88,15 @@ body.zoom-mode {
   z-index: 20;
 }
 
-.footer .info-section {
-  grid-column: 1 / span 4;
-  text-align: left;
+.footer {
+  justify-items: end;
+  align-items: end;
 }
 
-.footer .contact-section {
-  grid-column: 6 / span 3;
-}
-
-.footer .social-section {
+.footer .footer-info {
   grid-column: 9 / span 4;
   text-align: right;
+  justify-self: end;
 }
 
 /* Bottom bar */
@@ -151,12 +148,6 @@ body.zoom-mode {
 
 .logo-container:hover .circle-2 {
   transform: translate(0.5rem, -50%);
-}
-
-.header .menu-section h3 {
-  margin: 0;
-  font-size: 14px;
-  text-transform: uppercase;
 }
 
 .hamburger-button {
@@ -541,10 +532,6 @@ h3 {
     justify-content: flex-end;
   }
 
-  .header .menu-section h3 {
-    font-size: 16px;
-  }
-
   .hamburger-button {
     width: 3rem;
     height: 3rem;
@@ -560,20 +547,9 @@ h3 {
     font-size: 20px;
   }
 
-  .footer .info-section {
+  .footer .footer-info {
     grid-column: 1 / span 6;
-    text-align: left;
-    margin-bottom: 1rem;
-  }
-
-  .footer .contact-section {
-    grid-column: 1 / span 3;
-  }
-
-  .footer .social-section {
-    grid-column: 4 / span 3;
-    text-align: left;
-    margin-top: 0.5rem;
+    text-align: right;
   }
 
   .image-title-overlay {
@@ -624,49 +600,12 @@ h3 {
   letter-spacing: 2px;
 }
 
-.controls-container {
-  position: fixed;
-  bottom: 1.25em;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  z-index: 6;
-  opacity: 0;
-  transition: left 1.2s cubic-bezier(0.87, 0, 0.13, 1);
-}
-
-.controls-container.visible {
-  opacity: 1;
-}
-
-.controls-container.split-mode {
-  left: 75%;
-}
-
-.percentage-indicator {
-  background-color: #f0f0f0;
-  background-image: radial-gradient(rgba(0, 0, 0, 0.015) 1px, transparent 0);
-  background-size: 0.44em 0.44em;
-  background-position: -0.06em -0.06em;
-  padding: 0.625em 1.25em;
-  border-radius: 0.25em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "TheGoodMonolith", monospace;
-  font-size: 0.75em;
-  font-weight: 400;
-  text-transform: uppercase;
-  color: #333;
-  min-width: 5em;
-  white-space: nowrap;
-}
-
 body.modal-open {
   overflow: hidden;
 }
 
-.about-modal {
+.about-modal,
+.contact-modal {
   position: fixed;
   inset: 0;
   display: flex;
@@ -678,19 +617,22 @@ body.modal-open {
   z-index: 10001;
 }
 
-.about-modal.active {
+.about-modal.active,
+.contact-modal.active {
   opacity: 1;
   pointer-events: auto;
 }
 
-.about-modal__backdrop {
+.about-modal__backdrop,
+.contact-modal__backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(8px);
 }
 
-.about-modal__content {
+.about-modal__content,
+.contact-modal__content {
   position: relative;
   background: rgba(8, 8, 8, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -702,7 +644,8 @@ body.modal-open {
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
 }
 
-.about-modal__close {
+.about-modal__close,
+.contact-modal__close {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -715,20 +658,51 @@ body.modal-open {
   transition: color 0.3s ease;
 }
 
-.about-modal__close:hover {
+.about-modal__close:hover,
+.contact-modal__close:hover {
   color: #fff;
 }
 
-.about-modal h2 {
+.about-modal h2,
+.contact-modal h2 {
   font-size: 32px;
   margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
 }
 
-.about-modal p {
+.about-modal p,
+.contact-modal p {
   font-size: 16px;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.85);
+}
+
+.about-modal__profile {
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  margin-bottom: 2rem;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.about-modal__profile-placeholder {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.contact-modal__list {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.contact-modal__list a {
+  font-size: 18px;
 }
 
 /* Simple 64px white arrow button */
